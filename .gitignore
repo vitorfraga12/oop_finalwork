@@ -1,0 +1,16 @@
+# Java compiled files
+*.class
+
+# Eclipse generated output
+bin/
+
+# Maven/Gradle output, caso use depois
+target/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
