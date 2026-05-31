@@ -6,9 +6,4 @@ public class Cashier extends User{
 		super(firstName, lastName, username, password);
 	}
 	
-	@Override
-	public String getRole() {
-		return "cashier";
-	}
-
 }

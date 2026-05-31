@@ -1,38 +1,37 @@
 package model;
 
+import pricing.CategoryDiscountPolicy;
+import pricing.NoCategoryDiscount;
+
 public class Category {
 	
 	private String name;
-	private double discountPercent;
+	private CategoryDiscountPolicy policy;
+	private boolean perishable;
 	
-	public Category(String name) {
+	public Category(String name, boolean perishable) {
 		this.name = name;
-		this.discountPercent = 0.0;
-	}
-	
-	public double applyDiscount(double price) {
-		return price*(1-discountPercent/100);
-	}
-	
-	// to confirme that the percent its correct
-	public void setDiscountPercent(double discountPercent) {
-		if (discountPercent == 0 || discountPercent >100) {
-			throw new IllegalArgumentException("Discount percent must be between 0 and 100.");
-		}
-		
-		this.discountPercent = discountPercent;
-	}
-	
-	public boolean isPerishable() {
-		return name.equalsIgnoreCase("meat") || name.equalsIgnoreCase("dairy");
+		this.policy = new NoCategoryDiscount();
+		this.perishable = perishable;
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public double getDiscountPercent() {
-		return discountPercent;
+	public double applyDiscount(double price) {
+		return policy.categoryDiscount(price);
 	}
 
-}
+	public void setCategoryDiscountPolicy(CategoryDiscountPolicy policy) {
+		this.policy = policy;
+	}
+
+	public CategoryDiscountPolicy getDiscountPolicy() {
+		return policy;
+	}
+	
+	public boolean isPerishable(){
+		return perishable;
+	}
+	}

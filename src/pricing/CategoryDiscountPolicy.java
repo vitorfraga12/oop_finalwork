@@ -1,5 +1,5 @@
 package pricing;
 
-public class CategoryDiscountPolicy {
-
+public interface CategoryDiscountPolicy {
+	double categoryDiscount(double total);
 }

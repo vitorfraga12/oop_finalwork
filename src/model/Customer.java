@@ -2,23 +2,30 @@ package model;
 
 import delivery.DeliveryRequest;
 import payment.BankCard;
-import pricing.DiscountPlan;
+import pricing.CostumerPlan;
+import pricing.NormalPlan;
 
 public class Customer extends User{
-	private String address;
-	private DiscountPlan plan;
-	private DeliveryRequest pendingDelivery;
-	private BankCard bankCard;
+	private int address;
+	private CostumerPlan plan;
+	private DeliveryRequest waitingDelivery;
+	private int id;
+	private static int ID = 0;
 	
-	public Customer(String firstName, String lastName, String username, String password, String address) {
+	public Customer(String firstName, String lastName, String username, String password, int address) {
 		super(firstName, lastName, username, password);
 		this.address = address;
-		this.pendingDelivery = null;
-		this.bankCard = null;
-			
+		this.waitingDelivery = null;
+		ID=+1;
+		this.id=ID;
+		this.plan = new NormalPlan();
 	}
 	
-	public void subscribeToPlan(DiscountPlan plan) {
+	public int getId() {
+		return id;
+	}
+	
+	public void subscribeToPlan(CostumerPlan plan) {
 		this.plan = plan;
 	}
 	
@@ -26,43 +33,22 @@ public class Customer extends User{
 		return plan != null;
 	}
 	
-	public void requestToDelivery(String address) {
-		this.pendingDelivery = new DeliveryRequest(address);
+	public void requestToDelivery(DeliveryRequest deliveryRequest) {
+		this.waitingDelivery = deliveryRequest;
 	}
 	
-	public boolean hasPendingDelivery() {
-		return pendingDelivery != null;
+	public boolean hasWaitingDelivery() {
+		return waitingDelivery != null;
 	}
 	
-	public DeliveryRequest consumePendingDelivery() {
-		DeliveryRequest delivery = pendingDelivery;
-        pendingDelivery = null;
+	public DeliveryRequest consumeWaitingDelivery() {
+		DeliveryRequest delivery = waitingDelivery;
+		this.waitingDelivery = null;
         return delivery;
 	}
 	
-	public void setBankCard(BankCard bankCard) {
-		this.bankCard = bankCard;
-	}
-	
-	public BankCard getBankCard() {
-		return bankCard;
-	}
-	
-	@Override
-	public String getRole() {
-		return "customer";
-	}
-	
-	public String getAddress() {
-		return address;
-	}
-	
-	public DiscountPlan getPlan() {
-		return plan;
-	}
-	
-	public DeliveryRequest getPendingDelivery() {
-		return pendingDelivery;
+	public DeliveryRequest getWaitingDelivery() {
+		return waitingDelivery;
 	}
 	
 	

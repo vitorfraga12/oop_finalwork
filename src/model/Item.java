@@ -6,19 +6,19 @@ public class Item {
 	private double unitPrice;
 	private double weight;
 	private int stock;
-	private int lowStockThreshold;
+	private int threshold;
 	
 	public Item(String name, Category category, double unitPrice, double weight, int stock) {
 		if (unitPrice < 0) {
-			throw new IllegalArgumentException("unit price cant be negative.");
+			throw new IllegalArgumentException("unit price cannot be negative.");
 		}
 		
 		if (weight < 0) {
-			throw new IllegalArgumentException("weight cant be negative.");
+			throw new IllegalArgumentException("weight cannot be negative.");
 		}
 		
 		if (stock < 0) {
-			throw new IllegalArgumentException("stock cant be negative.");
+			throw new IllegalArgumentException("stock cannot be negative.");
 		}
 		
 		this.name = name;
@@ -26,7 +26,7 @@ public class Item {
 		this.unitPrice = unitPrice;
 		this.weight = weight;
 		this.stock = stock;
-		this.lowStockThreshold = 2;
+		this.threshold = 2;
 	}
 	
 	public double priceForQuantity(int quantity){
@@ -35,8 +35,8 @@ public class Item {
 	}
 	
 	public double discountedPriceForQuantity(int quantity) {
-		double rawPrice = priceForQuantity(quantity);
-		return category.applyDiscount(rawPrice);
+		double total = priceForQuantity(quantity);
+		return category.applyDiscount(total);
 	}
 	
 	public double weightForQuantity(int quantity) {
@@ -58,8 +58,8 @@ public class Item {
 		stock += quantity;
 	}
 	
-	public boolean isLowStock() {
-		return category.isPerishable() && stock <= lowStockThreshold;
+	public boolean isBelowThreshold() {
+		return category.isPerishable() && stock <= threshold;
 	}
 	
 	private void validateQuantity(int quantity) {
@@ -88,16 +88,16 @@ public class Item {
 		return stock;
 	}
 	
-	public int getLowStockThreshold() {
-		return lowStockThreshold;
+	public int getThreshold() {
+		return threshold;
 	}
 	
-	public void setLowStockThreshold(int lowStockThreshold) {
-		if (lowStockThreshold < 0) {
-			throw new IllegalArgumentException("low stock threshold cant be negative");
+	public void setThreshold(int threshold) {
+		if (threshold < 0) {
+			throw new IllegalArgumentException("low stock threshold cannot negative");
 		}
 		
-		this.lowStockThreshold = lowStockThreshold;
+		this.threshold = threshold;
 	}
 	
 

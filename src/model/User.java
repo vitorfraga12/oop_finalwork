@@ -21,16 +21,6 @@ public abstract class User {
 		return firstName + " " + lastName;
 	}
 	
-	public abstract String getRole();
-	
-	public String getFirstName() {
-		return firstName;
-	}
-	
-	public String getLasttName() {
-		return lastName;
-	}
-	
 	public String getUsername() {
 		return username;
 	}
