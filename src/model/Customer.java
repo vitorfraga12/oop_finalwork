@@ -6,13 +6,13 @@ import pricing.CostumerPlan;
 import pricing.NormalPlan;
 
 public class Customer extends User{
-	private double address;
+	private String address;
 	private CostumerPlan plan;
 	private DeliveryRequest waitingDelivery;
 	private int id;
 	private static int ID = 0;
 	
-	public Customer(String firstName, String lastName, String username, String password, double address) {
+	public Customer(String firstName, String lastName, String username, String password, String address) {
 		super(firstName, lastName, username, password);
 		this.address = address;
 		this.waitingDelivery = null;

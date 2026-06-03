@@ -63,8 +63,7 @@ public class CheckoutSession {
 
 		double categoryDiscountedTotal = cart.computeCategoryDiscountedTotal();
 
-		double planDiscountedTotal = customer.getPlan()
-				.applyDiscount(categoryDiscountedTotal);
+		double planDiscountedTotal = customer.getPlan().costumerDiscount(categoryDiscountedTotal);
 
 		double deliveryFee = 0.0;
 
@@ -73,8 +72,8 @@ public class CheckoutSession {
 				throw new IllegalArgumentException("Delivery policy cannot be null.");
 			}
 
-			double totalWeight = cart.computeTotalWeight();
-			double distanceKm = deliveryRequest.getDistanceKm();
+			double totalWeight = this.cart.computeTotalWeight();
+			double distanceKm = this.deliveryRequest.getDistanceKm();
 
 			deliveryFee = deliveryPolicy.computeFee(
 					totalWeight,
