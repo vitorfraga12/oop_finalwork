@@ -1,5 +1,7 @@
 package observer;
 
-public class StockObserver {
+import model.Item;
 
+public interface StockObserver {
+	void onLowStock(Item item);
 }
