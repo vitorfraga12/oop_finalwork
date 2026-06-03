@@ -6,7 +6,7 @@ import pricing.CostumerPlan;
 import pricing.NormalPlan;
 
 public class Customer extends User{
-	private int address;
+	private double address;
 	private CostumerPlan plan;
 	private DeliveryRequest waitingDelivery;
 	private int id;
@@ -16,7 +16,7 @@ public class Customer extends User{
 		super(firstName, lastName, username, password);
 		this.address = address;
 		this.waitingDelivery = null;
-		ID=+1;
+		ID+=1;
 		this.id=ID;
 		this.plan = new NormalPlan();
 	}
