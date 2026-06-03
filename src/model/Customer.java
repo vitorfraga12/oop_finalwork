@@ -12,7 +12,7 @@ public class Customer extends User{
 	private int id;
 	private static int ID = 0;
 	
-	public Customer(String firstName, String lastName, String username, String password, int address) {
+	public Customer(String firstName, String lastName, String username, String password, double address) {
 		super(firstName, lastName, username, password);
 		this.address = address;
 		this.waitingDelivery = null;

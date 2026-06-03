@@ -68,6 +68,11 @@ public class Item {
 		}
 	}
 	
+	public boolean hasEnoughStock(int quantity) {
+		validateQuantity(quantity);
+		return stock >= quantity;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -99,6 +104,8 @@ public class Item {
 		
 		this.threshold = threshold;
 	}
+	
+	
 	
 
 }
