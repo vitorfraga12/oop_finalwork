@@ -45,27 +45,27 @@ public class Cart {
 	public double computeRawTotal() {
 		double total = 0;
 		
-		for(CartLine line: lines) {
-			total += line.computeRawPrice();
+		for (CartLine line : lines) {
+		    total += line.getRawPrice();
 		}
 		return total;
 	}
 	
-	public double computeDiscountedItemsTotal() {
-		double total = 0;
+	public double computeCategoryDiscountedTotal() {
+	    double total = 0;
 
-		for (CartLine line : lines) {
-			total += line.computeDiscountedPrice();
-		}
+	    for (CartLine line : lines) {
+	        total += line.getDiscountedPrice();
+	    }
 
-		return total;
+	    return total;
 	}
 	
 	public double computeTotalWeight() {
 		double totalWeight = 0;
 
 		for (CartLine line : lines) {
-			totalWeight += line.computeWeight();
+		    totalWeight += line.getWeight();
 		}
 
 		return totalWeight;
@@ -77,6 +77,21 @@ public class Cart {
 	
 	public List<CartLine> getLines() {
 		return Collections.unmodifiableList(lines);
+	}
+	
+	
+	public String displayCart() {
+	    if (lines.isEmpty()) {
+	        return "Cart is empty";
+	    }
+
+	    String result = "";
+
+	    for (CartLine line : lines) {
+	        result += line.displayLine() + "\n";
+	    }
+
+	    return result;
 	}
 		
 	private CartLine findLineByItem(Item item) {
