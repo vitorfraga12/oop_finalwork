@@ -33,6 +33,10 @@ public class Customer extends User{
 		return plan != null;
 	}
 	
+	public CostumerPlan getPlan() {
+	    return plan;
+	}
+	
 	public void requestToDelivery(DeliveryRequest deliveryRequest) {
 		this.waitingDelivery = deliveryRequest;
 	}
