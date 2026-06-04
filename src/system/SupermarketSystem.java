@@ -27,7 +27,7 @@ import payment.BankCard;
 import payment.POS;
 import payment.PaymentResult;
 import payment.SimulatedPaymentOutcome;
-
+import payment.TAS;
 import pricing.CostumerPlan;
 import pricing.NoCategoryDiscount;
 import pricing.PercentageCategoryDiscount;
@@ -44,9 +44,11 @@ public class SupermarketSystem {
 	private double revenue;
 
 	private POS pos;
+	private TAS tas;
 	private PlanFactory planFactory;
 	private DeliveryPolicy deliveryPolicy;
 	private LowStockNotifier lowStockNotifier;
+	private boolean configured;
 
 	public SupermarketSystem() {
 		this.users = new HashMap<>();
@@ -56,18 +58,26 @@ public class SupermarketSystem {
 		this.currentUser = null;
 		this.currentCheckout = null;
 		this.revenue = 0.0;
-
-		this.pos = new POS();
+		
+		this.tas= new TAS();
+		this.pos = new POS(tas);
+		
+		
 		this.planFactory = new PlanFactory();
 		this.deliveryPolicy = new StandardDeliveryPolicy();
 
 		this.lowStockNotifier = new LowStockNotifier();
 		this.lowStockNotifier.addObserver(new ManagerNotifier());
+		
+		this.configured = false;
 
 		addUser(new Manager("CEO", "Manager", "ceo", "123456789"));
 	}
 
 	public void setup() {
+		if (configured) {
+			throw new IllegalStateException("Setup has already been loaded.");
+		}
 		users.clear();
 		catalogue.clear();
 		categories.clear();
@@ -75,8 +85,9 @@ public class SupermarketSystem {
 		currentUser = null;
 		currentCheckout = null;
 		revenue = 0.0;
-
-		pos = new POS();
+		
+		this.tas= new TAS();
+		pos = new POS(tas);
 
 		addUser(new Manager("CEO", "Manager", "ceo", "123456789"));
 
@@ -97,9 +108,10 @@ public class SupermarketSystem {
 		addItemAsSystem("milk", "dairy", 2.5, 1.0, 20);
 		addItemAsSystem("chicken", "meat", 8.0, 1.5, 15);
 
-		pos.registerCard(new BankCard("1111", "1234", 1000.0));
-		pos.registerCard(new BankCard("2222", "0000", 30.0));
-		pos.registerCard(new BankCard("CARD" + customer.getId(), "0000", 1000.0));
+		tas.registerCard(new BankCard("1111", "1234", 1000.0));
+		tas.registerCard(new BankCard("2222", "0000", 30.0));
+		tas.registerCard(new BankCard("CARD" + customer.getId(), "0000", 1000.0));
+		configured = true;
 	}
 
 	public User login(String username, String password) {
@@ -139,7 +151,7 @@ public class SupermarketSystem {
 		Customer customer = new Customer(firstName, lastName, username, password, address);
 		addUser(customer);
 
-		pos.registerCard(new BankCard("CARD" + customer.getId(), "0000", 1000.0));
+		tas.registerCard(new BankCard("CARD" + customer.getId(), "0000", 1000.0));
 	}
 
 	public void addItem(String itemName, String categoryName, double unitPrice, double weight, int initialStock) {

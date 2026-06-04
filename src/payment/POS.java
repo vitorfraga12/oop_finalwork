@@ -1,24 +1,19 @@
 package payment;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class POS {
-	private Map<String, BankCard> registeredCards;
+
+	private TAS tas;
 	private SimulatedPaymentOutcome nextForcedOutcome;
-		
-	public POS() {
-		this.registeredCards = new HashMap<>();
+
+	public POS(TAS tas) {
+		if (tas == null) {
+			throw new IllegalArgumentException("TAS cant be null");
+		}
+
+		this.tas = tas;
 		this.nextForcedOutcome = SimulatedPaymentOutcome.NONE;
 	}
-	
-	public void registerCard(BankCard card) {
-		if (card == null) {
-			throw new IllegalArgumentException("Card cant be null");
-		}
-		registeredCards.put(card.getCardNumber(), card);
-	}
-	
+
 	public void simulateNextPayment(SimulatedPaymentOutcome outcome) {
 		if (outcome == null) {
 			throw new IllegalArgumentException("Outcome cant be null");
@@ -26,7 +21,7 @@ public class POS {
 
 		this.nextForcedOutcome = outcome;
 	}
-	
+
 	public PaymentResult pay(String cardNumber, String pin, double amount) {
 		if (cardNumber == null || cardNumber.isBlank()) {
 			throw new IllegalArgumentException("Card number cant be empty");
@@ -42,20 +37,20 @@ public class POS {
 
 		if (nextForcedOutcome != SimulatedPaymentOutcome.NONE) {
 			PaymentResult forcedResult = convertForcedOutcome(nextForcedOutcome);
+			nextForcedOutcome = SimulatedPaymentOutcome.NONE;
 
 			if (forcedResult == PaymentResult.SUCCESS) {
-				BankCard card = registeredCards.get(cardNumber);
-
-				if (card != null && card.hasEnoughBalance(amount)) {
-					card.debit(amount);
-				}
+				return payNormally(cardNumber, pin, amount);
 			}
 
-			nextForcedOutcome = SimulatedPaymentOutcome.NONE;
 			return forcedResult;
 		}
 
-		BankCard card = registeredCards.get(cardNumber);
+		return payNormally(cardNumber, pin, amount);
+	}
+
+	private PaymentResult payNormally(String cardNumber, String pin, double amount) {
+		BankCard card = tas.findCard(cardNumber);
 
 		if (card == null) {
 			return PaymentResult.CARD_NOT_FOUND;
@@ -65,14 +60,15 @@ public class POS {
 			return PaymentResult.PIN_WRONG;
 		}
 
-		if (!card.hasEnoughBalance(amount)) {
-			return PaymentResult.INSUFFICIENT_FUNDS;
-		}
+		tas.openConnection();
 
-		card.debit(amount);
-		return PaymentResult.SUCCESS;
+		try {
+			return tas.authorizeTransaction(cardNumber, amount);
+		} finally {
+			tas.closeConnection();
+		}
 	}
-	
+
 	private PaymentResult convertForcedOutcome(SimulatedPaymentOutcome outcome) {
 		switch (outcome) {
 			case SUCCESS:
@@ -92,5 +88,4 @@ public class POS {
 				throw new IllegalArgumentException("Can't convert NONE forced outcome.");
 		}
 	}
-
 }
