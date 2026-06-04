@@ -17,6 +17,8 @@ public class SupermarketCLI {
 	public SupermarketCLI() {
 		this.system = new SupermarketSystem();
 		this.scanner = new Scanner(System.in);
+		
+		runTest("my_supermarket.ini");
 	}
 
 	public static void main(String[] args) {
@@ -50,6 +52,7 @@ public class SupermarketCLI {
 
 	private void executeCommand(String line) {
 		String[] parts = line.split("\\s+");
+		
 		String command = parts[0].toLowerCase();
 
 		try {

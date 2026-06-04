@@ -26,6 +26,10 @@ public class Customer extends User{
 	}
 	
 	public void subscribeToPlan(CostumerPlan plan) {
+		if (plan == null) {
+			throw new IllegalArgumentException("Plan cannot be null.");
+		}
+
 		this.plan = plan;
 	}
 	
@@ -38,6 +42,10 @@ public class Customer extends User{
 	}
 	
 	public void requestDelivery(DeliveryRequest deliveryRequest) {
+		if (deliveryRequest == null) {
+			throw new IllegalArgumentException("Delivery request cannot be null.");
+		}
+
 		this.waitingDelivery = deliveryRequest;
 	}
 	
